@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -29,5 +30,15 @@ public class UserController {
      public  Users load(@RequestBody final Users users){
          userJpaRepository.save(users);
          return userJpaRepository.findByName(users.getName());
-     }      
+     }
+     @DeleteMapping("/delete/{id}")
+     public void delete(@PathVariable("id") long id){
+           Users users=userJpaRepository.getOne(id);
+           if(id==users.getId()) {
+               userJpaRepository.delete(users);
+           }
+           else {
+               System.out.println("Record is Not Available "+id);
+           }
+     }
 }
